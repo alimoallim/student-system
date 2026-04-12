@@ -1,0 +1,15 @@
+# Laravel
+backend/vendor
+backend/node_modules
+backend/.env
+backend/storage/*
+backend/bootstrap/cache/*
+
+# General
+.env
+.env.*
+*.log
+.DS_Store
+
+# Docker
+docker-compose.override.yml
