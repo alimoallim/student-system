@@ -30,7 +30,7 @@ COPY backend /var/www
 RUN composer install --no-dev --optimize-autoloader
 
 # Generate app key
-RUN php artisan key:generate
+#RUN php artisan key:generate
 
 # Fix permissions
 RUN chown -R www-data:www-data /var/www \
