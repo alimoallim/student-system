@@ -21,20 +21,32 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www
 
-# Copy app
+# Copy Laravel app (CORRECT)
 COPY backend /var/www
 
-# Install Laravel dependencies
-RUN composer install
+# Copy .env
+COPY backend/.env /var/www/.env
+# Install dependencies
+RUN composer install --no-dev --optimize-autoloader
 
-# Copy nginx config
-COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+# Generate app key
+RUN php artisan key:generate
 
 # Fix permissions
-RUN chown -R www-data:www-data /var/www
+RUN chown -R www-data:www-data /var/www \
+    && chmod -R 775 storage bootstrap/cache
+
+# REMOVE default nginx configs
+RUN rm -rf /etc/nginx/conf.d/*
+RUN rm -f /etc/nginx/sites-enabled/default
+RUN rm -f /etc/nginx/sites-available/default
+
+# Copy your config
+
+COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # Expose port
 EXPOSE 80
 
 # Start services
-CMD service nginx start && php-fpm
+CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
