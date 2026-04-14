@@ -33,8 +33,14 @@ RUN composer install --no-dev --optimize-autoloader
 #RUN php artisan key:generate
 
 # Fix permissions
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 775 storage bootstrap/cache
+#RUN chown -R www-data:www-data /var/www \
+   # && chmod -R 775 storage bootstrap/cache
+COPY backend /var/www
+RUN composer install --no-dev --optimize-autoloader
+RUN mkdir -p /var/www/storage /var/www/bootstrap/cache \
+    && chown -R www-data:www-data /var/www \
+    && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+
 
 # REMOVE default nginx configs
 RUN rm -rf /etc/nginx/conf.d/*
