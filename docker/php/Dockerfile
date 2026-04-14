@@ -25,7 +25,7 @@ WORKDIR /var/www
 COPY backend /var/www
 
 # Copy .env
-COPY backend/.env /var/www/.env
+#COPY backend/.env /var/www/.env
 # Install dependencies
 RUN composer install --no-dev --optimize-autoloader
 
