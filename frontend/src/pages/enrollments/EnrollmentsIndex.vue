@@ -1,0 +1,3 @@
+<template>
+    Enrollment show
+    </template>
